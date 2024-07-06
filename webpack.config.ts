@@ -1,8 +1,37 @@
 import webpack from "webpack";
 import path from "path";
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { BuildEnv, BuildPaths } from "./config/build/types/config";
+import { buildWebpackConfig } from "./config/build/buildWebpackConfig";
 
-const config: webpack.Configuration = {
+
+
+
+
+module.exports = (env: BuildEnv) => {
+  const port = env.port || 3000;
+  const mode = env.mode || 'development';
+  const isDev = mode === 'development';
+
+  const paths: BuildPaths = {
+    entry: path.resolve(__dirname, "src", "index.ts"),
+    build: path.resolve(__dirname, "build"),
+    html: path.resolve(__dirname, "public", "index.html")
+  }
+
+  const config: webpack.Configuration = buildWebpackConfig({
+    port,
+    mode,
+    isDev,
+    paths
+  })
+
+  return config;
+}
+
+
+
+/* const config: webpack.Configuration = {
   mode: 'development',
   entry: './src/index.ts',
   module: {
@@ -30,4 +59,4 @@ const config: webpack.Configuration = {
   ],
 };
 
-export default config;
+export default config; */
